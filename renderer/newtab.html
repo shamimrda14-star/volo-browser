@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Tab</title>
+<style>
+  :root {
+    --bg: #ffffff; --text: #202124; --text-dim: #5f6368;
+    --input-bg: #f1f3f4; --input-border: #dadce0; --tile-bg: #f1f3f4;
+    --tile-hover: #e8eaed; --accent: #1a73e8; --badge-bg: #fef7e0; --badge-text: #b06000;
+  }
+  [data-theme="dark"] {
+    --bg: #1f2328; --text: #e8eaed; --text-dim: #9aa0a6;
+    --input-bg: #3c4043; --input-border: #5f6368; --tile-bg: #35363a;
+    --tile-hover: #3c4043; --accent: #8ab4f8; --badge-bg: #3c4043; --badge-text: #fbbc04;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
+    padding: 9vh 16px 32px;
+  }
+  .logo-wrap { margin-bottom: 10px; }
+  .logo-img { width: 84px; height: 84px; border-radius: 20px; box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+  .wordmark { font-size: 44px; font-weight: 300; letter-spacing: -1px; margin-bottom: 6px; }
+  .wordmark b { font-weight: 700; color: var(--accent); }
+  .tagline { color: var(--text-dim); font-size: 14px; margin-bottom: 28px; }
+  .private-notice {
+    display: flex; gap: 8px; align-items: center;
+    background: var(--tile-bg); border-radius: 10px; padding: 10px 16px;
+    font-size: 13px; color: var(--text-dim); margin-bottom: 24px; max-width: 560px; text-align: center;
+  }
+  form { width: 100%; max-width: 580px; display: flex; margin-bottom: 36px; }
+  .search-box {
+    flex: 1; display: flex; align-items: center; gap: 10px;
+    background: var(--input-bg); border: 1px solid var(--input-border);
+    border-radius: 999px; padding: 0 8px 0 18px; height: 48px;
+  }
+  .search-box:focus-within { box-shadow: 0 2px 8px rgba(0,0,0,0.15); background: var(--bg); }
+  .search-box input {
+    flex: 1; border: none; outline: none; background: transparent;
+    font-size: 16px; color: var(--text); min-width: 0;
+  }
+  .search-box button {
+    border: none; background: var(--accent); color: #fff; cursor: pointer;
+    height: 34px; padding: 0 20px; border-radius: 999px; font-size: 14px; font-weight: 600;
+  }
+  .section { width: 100%; max-width: 640px; margin-bottom: 28px; }
+  .section h3 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-dim); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .sponsored-tag {
+    font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    background: var(--badge-bg); color: var(--badge-text);
+    padding: 2px 7px; border-radius: 999px;
+  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+  .tile {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 16px 8px 12px; border-radius: 12px; background: var(--tile-bg);
+    cursor: pointer; text-decoration: none; color: var(--text);
+    border: 1px solid transparent; transition: background 0.15s;
+  }
+  .tile:hover { background: var(--tile-hover); }
+  .tile .tile-icon {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: var(--accent); overflow: hidden;
+  }
+  .tile .tile-icon img { width: 22px; height: 22px; }
+  .tile .tile-sponsored {
+    font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+    background: var(--badge-bg); color: var(--badge-text);
+    padding: 1px 6px; border-radius: 999px;
+  }
+  .empty { color: var(--text-dim); font-size: 13px; text-align: center; padding: 8px 0 4px; }
+</style>
+</head>
+<body>
+<div class="logo-wrap"><img class="logo-img" src="../assets/logo.png" alt="Volo logo"></div>
+<div class="wordmark">Volo</div>
+<p class="tagline">Fast. Private. Yours.</p>
+
+<div class="private-notice" id="private-notice" hidden>
+  🔒 You are browsing privately. History is not saved in this window. Downloads and bookmarks are still saved.
+</div>
+
+<form id="search-form">
+  <div class="search-box">
+    <span>🔍</span>
+    <input id="search-input" type="text" placeholder="Search the web" autocomplete="off" spellcheck="false" autofocus>
+    <button type="submit">Search</button>
+  </div>
+</form>
+
+<div class="section" id="sponsored-section" hidden>
+  <h3>Recommended <span class="sponsored-tag" id="sponsored-tag" hidden>Sponsored</span></h3>
+  <div class="grid" id="sponsored-grid"></div>
+</div>
+
+<div class="section">
+  <h3>Quick links</h3>
+  <div class="grid" id="quick-grid"></div>
+  <p class="empty" id="quick-empty" hidden>Bookmark a page (Ctrl+D) and it will appear here.</p>
+</div>
+
+<script>
+  const params = new URLSearchParams(location.search);
+  document.documentElement.setAttribute('data-theme', params.get('theme') === 'dark' ? 'dark' : 'light');
+  if (params.get('private') === '1') document.getElementById('private-notice').hidden = false;
+
+  const api = window.voloNewTab;
+  const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+  function faviconUrl(u) {
+    try { return 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(new URL(u).hostname) + '&sz=64'; }
+    catch { return ''; }
+  }
+  function makeTile(title, url, sponsored) {
+    const a = document.createElement('a');
+    a.className = 'tile';
+    a.href = '#';
+    a.title = url;
+    const icon = faviconUrl(url);
+    a.innerHTML = `<span class="tile-icon">${icon ? `<img src="${esc(icon)}" onerror="this.outerHTML='${esc((title || '?')[0].toUpperCase())}'">` : esc((title || '?')[0].toUpperCase())}</span>` +
+      `<span class="tile-label">${esc(title || url)}</span>` +
+      (sponsored ? `<span class="tile-sponsored">Sponsored</span>` : '');
+    a.addEventListener('click', (e) => { e.preventDefault(); api.open(url); });
+    return a;
+  }
+
+  document.getElementById('search-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const q = document.getElementById('search-input').value.trim();
+    if (q) api.search(q);
+  });
+
+  (async () => {
+    if (!api) return;
+    const engine = await api.getEngine();
+    document.getElementById('search-input').placeholder = 'Search with ' + (engine && engine.name ? engine.name : 'DuckDuckGo');
+
+    // Sponsored shortcut tiles (plain links only — no ad code, no tracking).
+    // Managed in sponsored.json next to the app. Hidden when the list is empty.
+    // Tiles with sponsored:false are plain placeholders (e.g. his own blogs).
+    const sponsored = await api.getSponsored();
+    if (sponsored && sponsored.length) {
+      document.getElementById('sponsored-section').hidden = false;
+      document.getElementById('sponsored-tag').hidden = !sponsored.some(s => s.sponsored);
+      const grid = document.getElementById('sponsored-grid');
+      for (const s of sponsored) grid.appendChild(makeTile(s.title, s.url, s.sponsored));
+    }
+
+    // Quick links: bookmarks first, then most-visited sites.
+    const grid = document.getElementById('quick-grid');
+    const bookmarks = await api.getBookmarks();
+    const seen = new Set();
+    for (const b of bookmarks || []) {
+      if (seen.has(b.url)) continue;
+      seen.add(b.url);
+      grid.appendChild(makeTile(b.title, b.url));
+    }
+    if (grid.children.length < 8) {
+      const tops = await api.getTopSites();
+      for (const t of tops || []) {
+        if (grid.children.length >= 8) break;
+        if (seen.has(t.url)) continue;
+        seen.add(t.url);
+        grid.appendChild(makeTile(t.host, t.url));
+      }
+    }
+    if (!grid.children.length) document.getElementById('quick-empty').hidden = false;
+  })();
+</script>
+</body>
+</html>

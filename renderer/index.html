@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volo Browser</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="toolbar">
+  <!-- Tab strip -->
+  <div id="tabstrip">
+    <img id="toolbar-logo" src="../assets/logo.png" alt="Volo" title="Volo Browser — click for a new tab">
+    <div id="tabs"></div>
+    <button id="new-tab-btn" class="icon-btn" title="New tab (Ctrl+T)">
+      <svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+    </button>
+    <div id="private-badge" hidden>
+      <svg viewBox="0 0 24 24" width="13" height="13"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z" fill="currentColor"/></svg>
+      Private
+    </div>
+  </div>
+
+  <!-- Navigation bar -->
+  <div id="navbar">
+    <button id="back-btn" class="icon-btn" title="Back (Alt+←)">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </button>
+    <button id="forward-btn" class="icon-btn" title="Forward (Alt+→)">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M9 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </button>
+    <button id="reload-btn" class="icon-btn" title="Reload (Ctrl+R)">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </button>
+    <button id="home-btn" class="icon-btn" title="Home">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </button>
+
+    <div id="address-wrap">
+      <span id="site-icon" title="Site information">
+        <svg id="icon-secure" viewBox="0 0 24 24" width="14" height="14"><path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5zm-3 8V7a3 3 0 0 1 6 0v3H9z" fill="currentColor"/></svg>
+        <svg id="icon-globe" viewBox="0 0 24 24" width="14" height="14" style="display:none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      </span>
+      <input id="address-bar" type="text" placeholder="Search or enter address" spellcheck="false" autocomplete="off">
+      <button id="bookmark-btn" class="icon-btn small" title="Bookmark this page (Ctrl+D)">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path id="star-path" d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-3-5.4 3 1.1-6L3.2 9.4l6.1-.8L12 3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" fill="none"/></svg>
+      </button>
+    </div>
+
+    <button id="downloads-btn" class="icon-btn" title="Downloads (Ctrl+J)">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <span id="dl-badge" hidden></span>
+    </button>
+    <button id="history-btn" class="icon-btn" title="History (Ctrl+H)">
+      <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/><path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+    </button>
+    <button id="ai-btn" class="icon-btn" title="AI Assistant (Ctrl+Shift+A)">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l1.8 5.6L19.5 9l-5.7 1.4L12 16l-1.8-5.6L4.5 9l5.7-1.4L12 2zM19 15l.9 2.6L22.5 18.5l-2.6.9L19 22l-.9-2.6-2.6-.9 2.6-.9L19 15zM5 15l.7 2 2 .7-2 .7L5 22.4l-.7-2-2-.7 2-.7L5 15z" fill="currentColor"/></svg>
+    </button>
+    <button id="vpn-btn" class="icon-btn" title="Free VPN — off. Click to pick a server.">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm7.9 6h-3a15.6 15.6 0 0 0-1.4-3.6A8 8 0 0 1 19.9 8zM12 4a14 14 0 0 1 1.9 4h-3.8A14 14 0 0 1 12 4zM4.3 14H7a15.6 15.6 0 0 0 1.4 3.6A8 8 0 0 1 4.3 14zM4.3 10a8 8 0 0 1 4.2-3.6A15.6 15.6 0 0 0 7 10H4.3zM12 20a14 14 0 0 1-1.9-4h3.8A14 14 0 0 1 12 20zm2.3-6H9.7A12.6 12.6 0 0 1 10 10h4a12.6 12.6 0 0 1 .3 4zm.2 3.6A15.6 15.6 0 0 0 16 14h2.7a8 8 0 0 1-4.2 3.6zM17 10a15.6 15.6 0 0 0-1.5-3.6A8 8 0 0 1 19.7 10H17z" fill="currentColor"/></svg>
+      <span id="vpn-label" hidden></span>
+    </button>
+    <button id="adblock-btn" class="icon-btn" title="AdBlocker — on">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l8 3v6c0 5-3.5 9.3-8 11-4.5-1.7-8-6-8-11V5l8-3zm-1.2 14.6l5.2-5.2-1.4-1.4-3.8 3.8-1.8-1.8-1.4 1.4 3.2 3.2z" fill="currentColor"/></svg>
+      <span id="adblock-badge" hidden></span>
+    </button>
+    <button id="update-btn" class="icon-btn" title="Volo Browser — check for updates">
+      <svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 3v10m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <span id="update-dot" hidden></span>
+    </button>
+    <button id="menu-btn" class="icon-btn" title="Menu">
+      <svg viewBox="0 0 24 24" width="18" height="18"><circle cx="12" cy="5" r="1.6" fill="currentColor"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="12" cy="19" r="1.6" fill="currentColor"/></svg>
+    </button>
+  </div>
+
+  <!-- Find in page bar -->
+  <div id="find-bar" hidden>
+    <input id="find-input" type="text" placeholder="Find in page" spellcheck="false">
+    <span id="find-count"></span>
+    <button id="find-prev" class="icon-btn small" title="Previous match (Shift+Enter)">
+      <svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 15l6-6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </button>
+    <button id="find-next" class="icon-btn small" title="Next match (Enter)">
+      <svg viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    </button>
+    <button id="find-close" class="icon-btn small" title="Close (Esc)">✕</button>
+  </div>
+
+  <!-- Bookmarks bar -->
+  <div id="bookmarks-bar"></div>
+
+  <!-- Menu dropdown -->
+  <div id="menu-dropdown" hidden>
+    <button data-action="new-tab">New Tab <span class="kbd">Ctrl+T</span></button>
+    <button data-action="new-window">New Window <span class="kbd">Ctrl+N</span></button>
+    <button data-action="new-private">New Private Window <span class="kbd">Ctrl+Shift+N</span></button>
+    <hr>
+    <button data-action="history">History <span class="kbd">Ctrl+H</span></button>
+    <button data-action="downloads">Downloads <span class="kbd">Ctrl+J</span></button>
+    <button data-action="ai">AI Assistant <span class="kbd">Ctrl+Shift+A</span></button>
+    <button data-action="find">Find in Page <span class="kbd">Ctrl+F</span></button>
+    <button data-action="print">Print <span class="kbd">Ctrl+P</span></button>
+    <button data-action="toggle-bookmarks-bar">Bookmarks Bar <span class="kbd">Ctrl+Shift+B</span></button>
+    <hr>
+    <button data-action="toggle-theme">Toggle Dark / Light Theme</button>
+    <button data-action="settings">Settings</button>
+    <button data-action="about">About Volo Browser</button>
+    <hr>
+    <button data-action="clear-all-history">Clear All History</button>
+    <button data-action="translate-bn">Translate Page to Bangla</button>
+    <button data-action="reader">Reader View</button>
+    <button data-action="screenshot">Screenshot Full Page</button>
+    <button data-action="pip">Pop Out Video</button>
+    <button data-action="volo-call">Volo Call — Download</button>
+    <button data-action="check-updates" id="menu-update-btn">Check for Updates</button>
+  </div>
+
+  <!-- VPN quick-pick dropdown (one tap switches server) -->
+  <div id="vpn-dropdown" hidden>
+    <div class="dropdown-head">Free VPN — <span id="vpn-dd-status">Off</span></div>
+    <div id="vpn-server-list"></div>
+    <hr>
+    <button data-vpn="next">Switch to Next Server</button>
+    <button data-vpn="refresh">Refresh Server List</button>
+    <button data-vpn="off">Turn VPN Off</button>
+    <button data-vpn="settings">VPN Settings…</button>
+  </div>
+</div>
+
+<!-- Slide-over panels -->
+<div id="panel-overlay" hidden>
+  <div class="panel-backdrop"></div>
+
+  <section id="history-panel" class="panel" hidden>
+    <header><h2>History</h2><button class="panel-close" data-panel="history-panel">✕</button></header>
+    <div class="panel-tools">
+      <input id="history-filter" type="text" placeholder="Search history…">
+      <button id="history-clear-btn" class="btn danger" title="Clears history, cookies and site data, and cache — all in one click">Clear All History</button>
+    </div>
+    <div id="history-list" class="list"></div>
+  </section>
+
+  <section id="downloads-panel" class="panel" hidden>
+    <header><h2>Downloads</h2><button class="panel-close" data-panel="downloads-panel">✕</button></header>
+    <div class="panel-tools">
+      <button id="downloads-clear-btn" class="btn">Clear Finished</button>
+    </div>
+    <div id="downloads-list" class="list"></div>
+  </section>
+
+  <section id="ai-panel" class="panel" hidden>
+    <header><h2>AI Assistant</h2><button class="panel-close" data-panel="ai-panel">✕</button></header>
+    <div id="ai-setup" class="ai-setup" hidden>
+      <p><strong>Set up the AI assistant</strong></p>
+      <p>This browser uses Google Gemini. Get a free API key from Google AI Studio, then paste it in Settings → AI Assistant.</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button id="ai-get-key-btn" class="btn">Get a Free Key</button>
+        <button id="ai-open-settings-btn" class="btn">Open Settings</button>
+      </div>
+      <p class="muted">Your key stays on this computer and is sent only to Google's Gemini API. Chat history is kept for this session only and is never saved.</p>
+    </div>
+    <div id="ai-messages" class="ai-messages"></div>
+    <div class="ai-input-row">
+      <input id="ai-input" type="text" placeholder="Ask the AI assistant…" spellcheck="true" autocomplete="off">
+      <button id="ai-send-btn" class="btn primary">Send</button>
+    </div>
+    <div class="ai-foot">
+      <button id="ai-new-chat-btn" class="btn">New chat</button>
+      <span class="muted">Powered by Google Gemini · your key, your device</span>
+    </div>
+  </section>
+
+  <section id="settings-panel" class="panel" hidden>
+    <header><h2>Settings</h2><button class="panel-close" data-panel="settings-panel">✕</button></header>
+    <div class="settings-body">
+      <label>Search engine
+        <select id="setting-engine">
+          <option value="google">Google</option>
+          <option value="duckduckgo">DuckDuckGo</option>
+          <option value="bing">Bing</option>
+        </select>
+      </label>
+      <label>Private search engine (private windows)
+        <select id="setting-private-engine">
+          <option value="duckduckgo">DuckDuckGo</option>
+          <option value="google">Google</option>
+          <option value="bing">Bing</option>
+        </select>
+      </label>
+      <label>Theme
+        <select id="setting-theme">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+      <label>Homepage
+        <input id="setting-homepage" type="text" placeholder="volo://newtab or https://…">
+      </label>
+      <label class="check-row"><input id="setting-bookmarks-bar" type="checkbox"> Show bookmarks bar</label>
+      <hr>
+      <h3 style="font-size:14px">Blocked sites (Secure DNS)</h3>
+      <p class="muted">Encrypts DNS lookups so DNS-level blocks can't see or block the sites you visit. Secure mode sends DNS to Cloudflare or Google instead of your ISP.</p>
+      <label>Secure DNS
+        <select id="setting-doh-mode">
+          <option value="secure">Secure (bypass DNS blocks)</option>
+          <option value="automatic">Automatic (secure when available)</option>
+          <option value="off">Off</option>
+        </select>
+      </label>
+      <label>Secure DNS provider
+        <select id="setting-doh-template">
+          <option value="cloudflare">Cloudflare (1.1.1.1)</option>
+          <option value="google">Google (8.8.8.8)</option>
+          <option value="quad9">Quad9 (9.9.9.9)</option>
+        </select>
+      </label>
+      <p class="muted">Changing Secure DNS needs a browser restart to take effect.</p>
+      <div><button id="restart-btn" class="btn">Restart Browser</button></div>
+      <hr>
+      <h3 style="font-size:14px">Proxy</h3>
+      <p class="muted">Route traffic through a proxy server. Applies immediately — no restart needed.</p>
+      <label>Proxy mode
+        <select id="setting-proxy-mode">
+          <option value="system">Use system proxy settings</option>
+          <option value="none">No proxy</option>
+          <option value="manual">Manual proxy</option>
+        </select>
+      </label>
+      <label>Proxy rules
+        <input id="setting-proxy-rules" type="text" placeholder="http=127.0.0.1:8080;https=127.0.0.1:8080">
+      </label>
+      <label>Bypass proxy for
+        <input id="setting-proxy-bypass" type="text" placeholder="localhost,127.0.0.1">
+      </label>
+      <p class="muted">SOCKS proxies work too: socks5://127.0.0.1:1080. For a proxy that needs a username and password, fill these in (stored in this computer's settings file — see README).</p>
+      <label>Proxy username (optional)
+        <input id="setting-proxy-username" type="text" placeholder="username" autocomplete="off">
+      </label>
+      <label>Proxy password (optional)
+        <input id="setting-proxy-password" type="password" placeholder="password" autocomplete="off">
+      </label>
+      <hr>
+      <h3 style="font-size:14px">Free VPN</h3>
+      <p class="muted">Routes your traffic through a free public server so blocked sites open and your location looks like the server's country. Servers are volunteers' public proxies from GeoNode's free list — no account, no key.</p>
+      <p class="muted"><strong>Honest warning:</strong> free servers are slow, they come and go, and a free server can see your traffic — use it for unblocking sites and casual browsing only, never for banking, passwords, or sensitive logins.</p>
+      <label class="check-row"><input id="setting-vpn-enabled" type="checkbox"> VPN on</label>
+      <label>Server
+        <select id="setting-vpn-server"></select>
+      </label>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button id="vpn-refresh-btn" class="btn">Refresh Server List</button>
+        <button id="vpn-next-btn" class="btn">Switch to Next Server</button>
+      </div>
+      <p class="muted" id="vpn-status-line">VPN is off.</p>
+      <hr>
+      <h3 style="font-size:14px">AdBlocker</h3>
+      <p class="muted">Blocks ads and trackers on every page (EasyList). On by default. Some sites ask you to turn your blocker off — use "Allow ads on this site" for those, instead of turning blocking off everywhere.</p>
+      <label class="check-row"><input id="setting-adblock-enabled" type="checkbox"> Block ads and trackers</label>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button id="adblock-allow-site-btn" class="btn">Allow Ads on This Site</button>
+        <button id="adblock-block-site-btn" class="btn">Block Ads on This Site Again</button>
+      </div>
+      <p class="muted" id="adblock-status-line"></p>
+      <hr>
+      <h3 style="font-size:14px">Tabs &amp; Reading</h3>
+      <label>Sleep inactive tabs after
+        <select id="setting-tab-sleep">
+          <option value="0">Never (off)</option>
+          <option value="5">5 minutes</option>
+          <option value="15">15 minutes</option>
+          <option value="30">30 minutes</option>
+        </select>
+      </label>
+      <p class="muted">Sleeping tabs free their memory and reload when clicked. Tabs playing audio never sleep.</p>
+      <label>Translate pages to
+        <select id="setting-translate-lang">
+          <option value="bn">Bangla</option>
+          <option value="en">English</option>
+          <option value="hi">Hindi</option>
+          <option value="es">Spanish</option>
+          <option value="ar">Arabic</option>
+          <option value="fr">French</option>
+          <option value="de">German</option>
+        </select>
+      </label>
+      <hr>
+      <h3 style="font-size:14px">AI Assistant (Google Gemini)</h3>
+      <p class="muted">The AI panel uses Google Gemini with <strong>your own free API key</strong> from Google AI Studio. The key is stored only on this computer and sent only to Google's Gemini API — never anywhere else. No key is built into the browser.</p>
+      <label>Gemini API key
+        <input id="setting-ai-key" type="password" placeholder="Paste your Gemini API key" autocomplete="off">
+      </label>
+      <label>Model
+        <input id="setting-ai-model" type="text" placeholder="gemini-2.0-flash" autocomplete="off">
+      </label>
+      <div><button id="ai-studio-btn" class="btn">Get a Free Key at Google AI Studio</button></div>
+      <p class="muted">On Google's free tier, content you send may be used to improve Google's products — don't paste passwords or private data. Chat history is session-only and never saved.</p>
+      <hr>
+      <h3 style="font-size:14px">Extensions</h3>
+      <p class="muted">Load Chrome extensions from an unpacked folder or a .crx file. Extensions run in normal windows only. Chrome Web Store one-click install does not work in this browser — download the .crx or the unpacked extension first.</p>
+      <div id="extensions-list" class="list" style="flex:none; max-height:200px; border:1px solid var(--border); border-radius:8px;"></div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap">
+        <button id="ext-unpacked-btn" class="btn">Load Unpacked Extension…</button>
+        <button id="ext-crx-btn" class="btn">Install .crx File…</button>
+      </div>
+      <hr>
+      <h3 style="font-size:14px">Clear browsing data</h3>
+      <label class="check-row"><input id="clear-history" type="checkbox" checked> Browsing history</label>
+      <label class="check-row"><input id="clear-cookies" type="checkbox" checked> Cookies and site data (signs you out of sites)</label>
+      <label class="check-row"><input id="clear-cache" type="checkbox" checked> Cached images and files</label>
+      <div><button id="clear-data-btn" class="btn danger">Clear Selected Data</button></div>
+      <p class="muted" id="settings-version"></p>
+    </div>
+  </section>
+
+  <section id="about-panel" class="panel" hidden>
+    <header><h2>About Volo Browser</h2><button class="panel-close" data-panel="about-panel">✕</button></header>
+    <div class="settings-body">
+      <img class="about-logo" src="../assets/logo.png" alt="Volo logo">
+      <p><strong>Volo Browser v1.0.0</strong></p>
+      <p>A desktop web browser built on Chromium — the same engine Google Chrome uses — so pages render exactly like Chrome.</p>
+      <p class="muted" id="about-versions"></p>
+      <p class="muted">No telemetry. No analytics. Bookmarks and history stay on your computer.</p>
+    </div>
+  </section>
+</div>
+
+<script src="renderer.js"></script>
+</body>
+</html>
