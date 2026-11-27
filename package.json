@@ -22,7 +22,8 @@
     "publish": {
       "provider": "github",
       "owner": "shamimrda14-star",
-      "repo": "volo-browser"
+      "repo": "volo-browser",
+      "releaseType": "release"
     },
     "directories": {
       "output": "dist"
