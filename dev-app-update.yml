@@ -1,0 +1,5 @@
+# Dev-only update feed for the --smoke-updater test. Points at the local test
+# server (NOT GitHub). Never shipped: this file is not in package.json "files".
+provider: generic
+url: http://127.0.0.1:8901/updates/
+updaterCacheDirName: volo-browser-updater

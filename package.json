@@ -1,0 +1,77 @@
+{
+  "name": "volo-browser",
+  "version": "1.1.0",
+  "description": "Volo Browser - a fast, private desktop web browser built on Chromium via Electron.",
+  "desktopName": "Volo Browser",
+  "main": "main.js",
+  "author": "Shamim Rahman",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build:linux": "electron-builder --linux",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win nsis",
+    "build:win:dir": "electron-builder --win dir",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.volobrowser.app",
+    "productName": "Volo Browser",
+    "publish": {
+      "provider": "github",
+      "owner": "shamimrda14-star",
+      "repo": "volo-browser"
+    },
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "preload-view.js",
+      "sponsored.json",
+      "filters/**/*",
+      "renderer/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Volo Browser"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "dir"
+      ],
+      "icon": "assets/logo.png",
+      "category": "Network",
+      "syncDesktopName": true
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns",
+      "category": "public.app-category.utilities",
+      "identity": null
+    }
+  },
+  "devDependencies": {
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0"
+  },
+  "dependencies": {
+    "@cliqz/adblocker": "^1.34.0",
+    "electron-updater": "^6.8.11",
+    "extract-zip": "^2.0.1"
+  }
+}

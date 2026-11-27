@@ -1,0 +1,25 @@
+{
+  "_comment": "SPONSORED / RECOMMENDED TILES for the Volo new-tab page. Plain links only — NO ad network, NO tracking, NO AdSense/AdMob code (putting ad code in a desktop app would violate Google policy and risk the AdSense account under review). Each tile: title + url + sponsored (true = shows a 'Sponsored' tag; false = plain placeholder/recommended tile). To add a real sponsor later, add an entry with sponsored:true. Empty tiles array = no Recommended section shown.",
+  "tiles": [
+    {
+      "sponsored": false,
+      "title": "The Airport Guide",
+      "url": "https://theairportguide24.blogspot.com/"
+    },
+    {
+      "sponsored": false,
+      "title": "The Movie Verdict",
+      "url": "https://themovieverdict24.blogspot.com/"
+    },
+    {
+      "sponsored": false,
+      "title": "Mr Phone",
+      "url": "https://mrphonereview24.blogspot.com/"
+    },
+    {
+      "sponsored": false,
+      "title": "Video Downloader",
+      "url": "https://muse.ai/s/video-downloader-hm6xzxnlwxmxhlxf/lDbqiC0qxlJ0QHF_9-2tAQlmSWaaMId0NAR7YEnCZMY"
+    }
+  ]
+}
