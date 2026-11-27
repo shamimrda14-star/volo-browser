@@ -1,0 +1,22 @@
+! Volo supplement — a small set of network rules for the biggest ad/tracker
+! domains, in case the prebuilt engine cannot be downloaded and the app
+! falls back to the bundled lists. All of these are ad/tracker-only hosts
+! (no legitimate content is served from them).
+||pagead2.googlesyndication.com^
+||googlesyndication.com^$third-party
+||googleadservices.com^
+||doubleclick.net^
+||googletagservices.com^
+||amazon-adsystem.com^
+||ads.yahoo.com^
+||outbrain.com^
+||taboola.com^
+||criteo.com^
+||moatads.com^
+||scorecardresearch.com^
+||connect.facebook.net^
+||facebook.com/tr^
+||adservice.google.com^
+||ads-twitter.com^
+||analytics.twitter.com^
+||bat.bing.com^
